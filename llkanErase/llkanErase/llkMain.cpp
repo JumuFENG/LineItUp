@@ -15,6 +15,26 @@ using std::endl;
 
 #define NumOfShape 9
 
+struct Cell
+{
+	int col;
+	int row;
+}
+
+struct ConnectedResult
+{
+	bool IsConnected;
+	Cell InnerPointOne;
+	Cell InnerPointTwo;
+	
+	ConnectedResult(bool connected, Cell point1 = NULL, Cell point2 = NULL)
+	{
+		IsConnected = connected;
+		InnerPointOne = point1;
+		InnerPointTwo = point2;
+	}
+}
+
 class CllkMap{
 	/************************************************************************/
 	/* 0 1 -------------m w
@@ -37,6 +57,11 @@ public:
 				vector<int> vecRow(h, 0);
 				vecMap.push_back(vecRow);
 			}
+		}
+		else
+		{
+			w = 0;
+			h = 0;
 		}
 	}
 
@@ -80,34 +105,57 @@ public:
         } while (!isFilledUp());
 	}
 
-	/** ≈–∂œ(fx,fy)(sx,sy)¡Ωµ„ «∑Ò¡¨Õ®
-	@return ¡¨Õ®∑µªÿtrue
+	/** Âà§Êñ≠(fx,fy)(sx,sy)‰∏§ÁÇπÊòØÂê¶ËøûÈÄö
+	@return ËøûÈÄöËøîÂõûtrue
 	*/
-	bool isConectted(int fx, int fy, int sx, int sy)
+	ConnectedResult isConectted(int col1, int row1, int col2, int row2)
 	{
-		if (fx == sx) // Õ¨“ª¡–
+		const int fx = col1 + 1;
+		const int fy = row1 + 1;
+		const int sx = col2 + 1;
+		const int sy = row2 + 1;
+		if (vecMap[fx][fy] != vecMap[sx][sy])
+		{
+			return ConnectedResult(false);
+		}
+		
+		if (fx == sx) // Âêå‰∏ÄÂàó
 		{
 			if (isStraitYConnected(fx, fy, sy))
 			{
-				return true;
+				return ConnectedResult(true);
 			}
 			else
 			{
-				return isConecttedAlongX(fx, fy, sx, sy);
+				ConnectedResult connected = isConecttedAlongX(fx, fy, sx, sy);
+				return ToOutUsedResult(connected);
 			}
 		}
-		if (fy == sy) // Õ¨“ª––
+		if (fy == sy) // Âêå‰∏ÄË°å
 		{
 			if (isStraitXConnected(fy, fx, sx))
 			{
-				return true;
+				return ConnectedResult(true);
 			}
 			else
 			{
-				return isConecttedAlongY(fx, fy, sx, sy);
+				ConnectedResult connected = isConecttedAlongY(fx, fy, sx, sy);
+				return ToOutUsedResult(connected);
 			}
 		}
-		return isConecttedAlongX(fx, fy, sx, sy)||isConecttedAlongY(fx, fy, sx, sy);
+		
+		ConnectedResult connectedResult = isConecttedAlongX(fx, fy, sx, sy);
+		if (connectedResult.IsConnected)
+		{
+			return ToOutUsedResult(connectedResult);
+		}
+		connectedResult = isConecttedAlongY(fx, fy, sx, sy);
+		if (connectedResult.IsConnected)
+		{
+			return ToOutUsedResult(connectedResult);
+		}
+		
+		return ConnectedResult(false)
 	}
 
     void print()
@@ -135,10 +183,14 @@ public:
         cout<<endl;
     }
 
-    void reset(int fx, int fy, int sx, int sy)
+    void reset(int col, int row)
     {
-        vecMap[fx][fy] = 0;
-        vecMap[sx][sy] = 0;
+        vecMap[col + 1][row + 1] = 0;
+    }
+    
+    int GetCellValue(int col, int row)
+    {
+    	return vecMap[col + 1][row + 1];
     }
 
     bool isblank()
@@ -158,24 +210,44 @@ public:
     }
 
 private:
-	/**  «∑Ò÷±œﬂ¡¨Õ® 
-	@param x=0 ±Ì æ¡Ω∏ˆµ„µƒx≤ªÕ¨£¨yæ˘Œ™yµƒ÷µ£¨fŒ™µ⁄“ª∏ˆµ„µƒx£¨sŒ™µ⁄∂˛∏ˆµ„µƒx
-	       y=0 ±Ì æ¡Ω∏ˆµ„µƒy≤ªÕ¨£¨xæ˘Œ™xµƒ÷µ£¨fŒ™µ⁄“ª∏ˆµ„µƒy£¨sŒ™µ⁄∂˛∏ˆµ„µƒy
-		   x£¨y÷¡…Ÿ”–“ª∏ˆŒ™0«“≤ªƒ‹Õ¨ ±Œ™0
-	@return ¡¨Õ®∑µªÿtrue
+        ConnectedResult ToOutUsedResult(ConnectedResult result)
+        {
+        	ConnectedResult r = result;
+        	if (r.InnerPointOne != NULL)
+        	{
+        		r.InnerPointOne.col = result.InnerPointOne.col + 1;
+        		r.InnerPointOne.row = result.InnerPointOne.row + 1;
+        	}
+        	
+        	if (r.InnerPointTwo != NULL)
+        	{
+        		r.InnerPointTwo.col = result.InnerPointTwo.col + 1;
+        		r.InnerPointTwo.row = result.InnerPointTwo.row + 1;
+        	}
+        	
+        	 return r;
+        }
+        
+	/** ÊòØÂê¶Âú®xÊñπÂêëÁõ¥Á∫øËøûÈÄö
+	@param ‰∏§‰∏™ÁÇπÁöÑyÁõ∏ÂêåÔºåf‰∏∫Á¨¨‰∏Ä‰∏™ÁÇπÁöÑxÔºås‰∏∫Á¨¨‰∫å‰∏™ÁÇπÁöÑx
+	@return ËøûÈÄöËøîÂõûtrue
 	*/
-	bool isStraitXConnected(int y, int f, int s)
+	bool isStraitXConnected(int y, int f, int s, bool checkValue = true)
 	{
         int l = min(f, s);
         int g = max(f, s);
-        if (g == l + 1)
+        
+        bool startEqualsEnd = false;
+        
+        if (checkValue)
         {
-            return vecMap[l][y] == vecMap[g][y];
+        	startEqualsEnd = vecMap[l][y] == vecMap[g][y];
         }
-        if (vecMap[l][y] != vecMap[g][y])
+        else
         {
-            return false;
+        	startEqualsEnd = vecMap[l][y] * vecMap[g][y] == 0;
         }
+        
         while (++l < g)
         {
             if (vecMap[l][y] != 0)
@@ -183,32 +255,39 @@ private:
                 return false;
             }
         }
-        return true;
+        return startEqualsEnd;
 	}
- 
-    bool isStraitYConnected(int x, int f, int s)
+
+    /** ÊòØÂê¶Âú®yÊñπÂêëÁõ¥Á∫øËøûÈÄö
+    @param ‰∏§‰∏™ÁÇπÁöÑxÁõ∏ÂêåÔºåf‰∏∫Á¨¨‰∏Ä‰∏™ÁÇπÁöÑyÔºås‰∏∫Á¨¨‰∫å‰∏™ÁÇπÁöÑy
+    @return ËøûÈÄöËøîÂõûtrue
+    */
+    bool isStraitYConnected(int x, int f, int s, bool checkValue = true)
     {
         int l = min(f, s);
         int g = max(f, s);
-        if (g == l + 1)
+        
+        bool startEqualsEnd = false;
+        if (checkValue)
         {
-            return vecMap[x][l] == vecMap[x][g];
+        	startEqualsEnd = vecMap[x][l] == vecMap[x][g];
         }
-        if (vecMap[x][l] != vecMap[x][g])
+        else
         {
-            return false;
+        	startEqualsEnd = vecMap[x][l] * vecMap[x][g] == 0;
         }
+        
         while (++l < g)
         {
-            if (vecMap[g][l] != 0)
+            if (vecMap[x][l] != 0)
             {
                 return false;
             }
         }
-        return true;
+        return startEqualsEnd;
     }
 
-	bool isConecttedAlongX(int fx, int fy, int sx, int sy)
+	ConnectedResult isConecttedAlongX(int fx, int fy, int sx, int sy)
 	{
         int fminX = 0, fmaxX = 0;
         for (int i = fx - 1, j = fx + 1; i >= 0 || j < w; --i, ++j)
@@ -258,17 +337,22 @@ private:
         smaxX = (smaxX == 0 ? w : smaxX);
         int minX = max(fminX, sminX);
         int maxX = min(fmaxX, smaxX);
+        
+        if (minX >= maxX)
+        {
+        	return ConnectedResult(false);
+        }
         for (int k = minX; k < maxX; ++k)
         {
-            if (isStraitYConnected(k, fy, sy))
+            if (isStraitYConnected(k, fy, sy, false))
             {
-                return true;
+                return ConnectedResult(true, Cell(k, fy), Cell(k, sy));
             }
         }
-		return false;
+		return ConnectedResult(false);
 	}
 
-	bool isConecttedAlongY(int fx, int fy, int sx, int sy)
+	ConnectedResult isConecttedAlongY(int fx, int fy, int sx, int sy)
 	{
         int fminY = 0, fmaxY = 0;
         for (int i = fy - 1, j = fy + 1; i >= 0 || j < h; --i, ++j)
@@ -318,18 +402,23 @@ private:
         smaxY = (smaxY == 0 ? h : smaxY);
         int minY = max(fminY, sminY);
         int maxY = min(fmaxY, smaxY);
+        if (minY >= maxY)
+        {
+        	return ConnectedResult(false);
+        }
         for (int k = minY; k < maxY; ++k)
         {
             if (isStraitXConnected(k, fx, sx))
             {
-                return true;
+                return ConnectedResult(true, Cell(fx, k), Cell(sx, k));
             }
         }
-        return false;
+        return ConnectedResult(false);
 	}
 
     bool isFilledUp()
     {
+    	int zeroNum = 0;
         for (vector<vector<int> >::iterator itRow = vecMap.begin() + 1;
             itRow != vecMap.end() - 1; ++itRow)
         {
@@ -338,10 +427,20 @@ private:
             {
                 if (*itCol == 0)
                 {
-                    return false;
+                    zeroNum++;
+                    if (zeroNum > 1)
+                    {
+                    	return false;
+                    }
                 }
             }
         }
+        
+        if (zeroNum == 1)
+        {
+        	return (w*h)%2 == 1;
+        }
+        
         return true;
     }
 
