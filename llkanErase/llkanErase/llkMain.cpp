@@ -4,6 +4,7 @@
 #include <cassert>
 #include <cstdlib>
 #include <time.h>
+#include <algorithm>
 
 using std::cout;
 using std::vector;
@@ -13,13 +14,25 @@ using std::cout;
 using std::cin;
 using std::endl;
 
-#define NumOfShape 9
+const int NumOfShape = 9;
 
 struct Cell
 {
 	int col;
 	int row;
-}
+	bool isNull;
+	Cell()
+	{
+		isNull = true;
+	}
+
+	Cell(int x , int y)
+	{
+		col = x;
+		row = y;
+		isNull = false;
+	}
+};
 
 struct ConnectedResult
 {
@@ -27,13 +40,13 @@ struct ConnectedResult
 	Cell InnerPointOne;
 	Cell InnerPointTwo;
 	
-	ConnectedResult(bool connected, Cell point1 = NULL, Cell point2 = NULL)
+	ConnectedResult(bool connected, Cell point1 = Cell(), Cell point2 = Cell())
 	{
 		IsConnected = connected;
 		InnerPointOne = point1;
 		InnerPointTwo = point2;
 	}
-}
+};
 
 class CllkMap{
 	/************************************************************************/
@@ -155,7 +168,7 @@ public:
 			return ToOutUsedResult(connectedResult);
 		}
 		
-		return ConnectedResult(false)
+		return ConnectedResult(false);
 	}
 
     void print()
@@ -213,13 +226,13 @@ private:
         ConnectedResult ToOutUsedResult(ConnectedResult result)
         {
         	ConnectedResult r = result;
-        	if (r.InnerPointOne != NULL)
+        	if (r.InnerPointOne.isNull)
         	{
         		r.InnerPointOne.col = result.InnerPointOne.col + 1;
         		r.InnerPointOne.row = result.InnerPointOne.row + 1;
         	}
         	
-        	if (r.InnerPointTwo != NULL)
+        	if (r.InnerPointTwo.isNull)
         	{
         		r.InnerPointTwo.col = result.InnerPointTwo.col + 1;
         		r.InnerPointTwo.row = result.InnerPointTwo.row + 1;
@@ -449,10 +462,13 @@ private:
 	int h; 
 	vector<vector<int> > vecMap;
 };
+
+#include <map>
+#include <memory>
+
 using std::shared_ptr;
 using std::string;
 using std::wstring;
-#include <map>
 
 void main()
 {
@@ -467,9 +483,10 @@ void main()
         cin>>fy;
         cin>>sx;
         cin>>sy;
-        if (cmp.isConectted(fx, fy, sx, sy))
+        if (cmp.isConectted(fx, fy, sx, sy).IsConnected)
         {
-            cmp.reset(fx,fy,sx,sy);
+			cmp.reset(fx, fy);
+			cmp.reset(sx, sy);
         }
     } while (!cmp.isblank());
     cmp.print();
