@@ -11,7 +11,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="LineUp.cpp" />
     <ClCompile Include="llkMain.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="LineUp.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C23894D6-A118-43EF-ABDE-D6900B36E1B8}</ProjectGuid>
