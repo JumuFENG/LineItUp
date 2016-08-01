@@ -63,5 +63,85 @@ namespace LineUpTest
             Assert::AreEqual(1, cell.col);
             Assert::AreEqual(2, cell.row);
 		};
+		    [TestMethod]
+    void test2x2Array() {
+        cellArray = CellArray(col: 2, row: 2, shapes: 2)
+        cellArray.initWithrray([[1, 2], [1, 2]])
+        Assert::IsTrue(cellArray.getCellValue(0, row: 0) == 1)
+        Assert::IsTrue(cellArray.getCellValue(0, row: 1) == 2)
+        Assert::IsTrue(cellArray.getCellValue(1, row: 0) == 1)
+        Assert::IsTrue(cellArray.getCellValue(1, row: 1) == 2)
+        Assert::IsTrue(cellArray.isConectted(0, row1: 0, col2: 1, row2: 0).isConnected)
+        Assert::IsTrue(!cellArray.isConectted(0, row1: 0, col2: 0, row2: 1).isConnected)
+    }
+    
+    [TestMethod]
+    void test3x2Array() {
+        cellArray = CellArray(col: 2, row: 3, shapes: 2)
+        cellArray.initWithrray([[1, 2, 2], [2, 1, 2]])
+        
+        Assert::IsTrue(cellArray.getCellValue(0, row: 0) == 1)
+        Assert::IsTrue(cellArray.getCellValue(0, row: 1) == 2)
+        Assert::IsTrue(cellArray.getCellValue(0, row: 2) == 2)
+        Assert::IsTrue(cellArray.getCellValue(1, row: 0) == 2)
+        Assert::IsTrue(cellArray.getCellValue(1, row: 1) == 1)
+        Assert::IsTrue(cellArray.getCellValue(1, row: 2) == 2)
+        Assert::IsTrue(cellArray.isConectted(0, row1: 1, col2: 0, row2: 2).isConnected)
+        Assert::IsTrue(cellArray.isConectted(1, row1: 0, col2: 1, row2: 2).isConnected)
+        Assert::IsTrue(!cellArray.isConectted(0, row1: 0, col2: 1, row2: 1).isConnected)
+    }
+
+    [TestMethod]
+    void test3x2PartArray() {
+        cellArray = CellArray(col: 2, row: 3, shapes: 2)
+        cellArray.initWithrray([[1, 0, 0], [2, 2, 1]])
+        
+        Assert::IsTrue(!cellArray.isConectted(0, row1: 0, col2: 0, row2: 1).isConnected)
+        Assert::IsTrue(!cellArray.isConectted(1, row1: 0, col2: 0, row2: 1).isConnected)
+        
+        Assert::IsTrue(cellArray.isConectted(1, row1: 0, col2: 1, row2: 1).isConnected)
+        Assert::IsTrue(cellArray.isConectted(0, row1: 0, col2: 1, row2: 2).isConnected)
+    }
+    
+    [TestMethod]
+    void testGeneralArray() {
+        cellArray = CellArray(col: 4, row: 4, shapes: 2)
+        cellArray.initWithrray([[1, 0, 0, 0], [0, 1, 1, 1], [1, 0, 1, 0], [1, 1, 0, 0]])
+        
+        Assert::IsTrue(cellArray.isConectted(0, row1: 0, col2: 1, row2: 1).isConnected)
+        Assert::IsTrue(cellArray.isConectted(0, row1: 0, col2: 1, row2: 2).isConnected)
+        Assert::IsTrue(cellArray.isConectted(0, row1: 0, col2: 1, row2: 3).isConnected)
+        Assert::IsTrue(cellArray.isConectted(0, row1: 0, col2: 2, row2: 0).isConnected)
+        Assert::IsTrue(cellArray.isConectted(0, row1: 0, col2: 3, row2: 0).isConnected)
+        Assert::IsTrue(cellArray.isConectted(0, row1: 0, col2: 2, row2: 2).isConnected)
+        Assert::IsTrue(cellArray.isConectted(0, row1: 0, col2: 3, row2: 1).isConnected)
+
+        Assert::IsTrue(cellArray.isConectted(1, row1: 1, col2: 1, row2: 2).isConnected)
+        Assert::IsTrue(cellArray.isConectted(1, row1: 1, col2: 1, row2: 3).isConnected)
+        Assert::IsTrue(cellArray.isConectted(1, row1: 1, col2: 2, row2: 0).isConnected)
+        Assert::IsTrue(cellArray.isConectted(1, row1: 1, col2: 3, row2: 0).isConnected)
+        Assert::IsTrue(cellArray.isConectted(1, row1: 1, col2: 2, row2: 2).isConnected)
+        Assert::IsTrue(cellArray.isConectted(1, row1: 1, col2: 3, row2: 1).isConnected)
+
+        Assert::IsTrue(cellArray.isConectted(1, row1: 2, col2: 1, row2: 3).isConnected)
+        Assert::IsTrue(!cellArray.isConectted(1, row1: 2, col2: 2, row2: 0).isConnected)
+        Assert::IsTrue(!cellArray.isConectted(1, row1: 2, col2: 3, row2: 0).isConnected)
+        Assert::IsTrue(cellArray.isConectted(1, row1: 2, col2: 2, row2: 2).isConnected)
+        Assert::IsTrue(!cellArray.isConectted(1, row1: 2, col2: 3, row2: 1).isConnected)
+
+        Assert::IsTrue(!cellArray.isConectted(1, row1: 3, col2: 2, row2: 0).isConnected)
+        Assert::IsTrue(cellArray.isConectted(1, row1: 3, col2: 3, row2: 0).isConnected)
+        Assert::IsTrue(cellArray.isConectted(1, row1: 3, col2: 2, row2: 2).isConnected)
+        Assert::IsTrue(cellArray.isConectted(1, row1: 3, col2: 3, row2: 1).isConnected)
+
+        Assert::IsTrue(cellArray.isConectted(2, row1: 0, col2: 3, row2: 0).isConnected)
+        Assert::IsTrue(cellArray.isConectted(2, row1: 0, col2: 2, row2: 2).isConnected)
+        Assert::IsTrue(cellArray.isConectted(2, row1: 0, col2: 3, row2: 1).isConnected)
+
+        Assert::IsTrue(cellArray.isConectted(3, row1: 0, col2: 2, row2: 2).isConnected)
+        Assert::IsTrue(cellArray.isConectted(3, row1: 0, col2: 3, row2: 1).isConnected)
+
+        Assert::IsTrue(cellArray.isConectted(2, row1: 2, col2: 3, row2: 1).isConnected)
+    }
 	};
 }
