@@ -9,7 +9,7 @@ n
 w
 */
 /************************************************************************/
-LineUpArray::LineUpArray(int m, int n)
+LineUpArray::LineUpArray(int m,int n, int shapes)
 {
     if (m != 0 && n != 0)
     {
@@ -26,6 +26,7 @@ LineUpArray::LineUpArray(int m, int n)
         w = 0;
         h = 0;
     }
+    shapeNum = shapes;
 }
 
 LineUpArray::~LineUpArray()
@@ -33,18 +34,18 @@ LineUpArray::~LineUpArray()
 
 }
 
-void LineUpArray::initRadom()
+void LineUpArray::InitRadom()
 {
     srand(time(NULL));
     vector<int> ele;
-    for (int i = 1; i <= NumOfShape; ++i)
+    for (int i = 1; i <= shapeNum; ++i)
     {
         ele.push_back(i);
     }
 
     do
     {
-        int cur = ele[rand() % NumOfShape];
+        int cur = ele[rand() % shapeNum];
         do
         {
             int fx = rand() % (w - 2) + 1;
@@ -68,10 +69,15 @@ void LineUpArray::initRadom()
     } while (!isFilledUp());
 }
 
+void LineUpArray::InitWithArray(vector<vector<int>> arr)
+{
+
+}
+
 /** 判断(fx,fy)(sx,sy)两点是否连通
 @return 连通返回true
 */
-ConnectedResult LineUpArray::isConectted(int col1, int row1, int col2, int row2)
+ConnectedResult LineUpArray::IsConectted(int col1, int row1, int col2, int row2)
 {
     const int fx = col1 + 1;
     const int fy = row1 + 1;
@@ -121,7 +127,7 @@ ConnectedResult LineUpArray::isConectted(int col1, int row1, int col2, int row2)
     return ConnectedResult(false);
 }
 
-void LineUpArray::print()
+void LineUpArray::Print()
 {
     cout << "  ";
     for (int i = 1; i < w - 1; ++i)
@@ -146,7 +152,7 @@ void LineUpArray::print()
     cout << endl;
 }
 
-void LineUpArray::reset(int col, int row)
+void LineUpArray::Reset(int col, int row)
 {
     vecMap[col + 1][row + 1] = 0;
 }
@@ -156,7 +162,7 @@ int LineUpArray::GetCellValue(int col, int row)
     return vecMap[col + 1][row + 1];
 }
 
-bool LineUpArray::isblank()
+bool LineUpArray::IsBlank()
 {
     for (vector<vector<int> >::iterator itRow = vecMap.begin();
         itRow != vecMap.end(); ++itRow)

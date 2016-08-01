@@ -51,24 +51,26 @@ struct ConnectedResult
 
 class LineUpArray {
 public:
-	LineUpArray(int m = 0, int n = 0);
+	LineUpArray(int m = 0, int n = 0, int shapes = NumOfShape);
 
 	~LineUpArray();
 
-	void initRadom();
+	void InitRadom();
 
 	/** 判断(fx,fy)(sx,sy)两点是否连通
 	@return 连通返回true
 	*/
-	ConnectedResult isConectted(int col1, int row1, int col2, int row2);
+	ConnectedResult IsConectted(int col1, int row1, int col2, int row2);
 
-	void print();
+	void Print();
 
-	void reset(int col, int row);
+	void Reset(int col, int row);
 
 	int GetCellValue(int col, int row);
 
-	bool isblank();
+	bool IsBlank();
+
+    void InitWithArray(vector<vector<int>>);
 
 private:
 	ConnectedResult ToOutUsedResult(ConnectedResult result);
@@ -94,5 +96,6 @@ private:
 private:
 	int w;
 	int h;
+    int shapeNum;
 	vector<vector<int> > vecMap;
 };

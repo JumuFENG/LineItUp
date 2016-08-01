@@ -9,21 +9,21 @@ using std::wstring;
 void main()
 {
     LineUpArray cmp(8, 7);
-    cmp.initRadom();
+    cmp.InitRadom();
     do
     {
-        cmp.print();
+        cmp.Print();
         int fx, fy, sx, sy;
         cout << "please enter coord of two points:(fx,fy),(sx,sy)" << endl;
         cin >> fx;
         cin >> fy;
         cin >> sx;
         cin >> sy;
-        if (cmp.isConectted(fx, fy, sx, sy).IsConnected)
+        if (cmp.IsConectted(fx, fy, sx, sy).IsConnected)
         {
-            cmp.reset(fx, fy);
-            cmp.reset(sx, sy);
+            cmp.Reset(fx, fy);
+            cmp.Reset(sx, sy);
         }
-    } while (!cmp.isblank());
-    cmp.print();
+    } while (!cmp.IsBlank());
+    cmp.Print();
 }
