@@ -69,13 +69,19 @@ void LineUpArray::InitRadom()
     } while (!isFilledUp());
 }
 
-void LineUpArray::InitWithArray(vector<vector<int>> arr)
+void LineUpArray::InitWithArray(vector<vector<int>> array)
 {
-
+    for (i = 1; i <= w - 2; ++i) {
+        for (j = 1; j <= h - 2; ++j) {
+            if (array.count > i - 1 && array.first?.count > j - 1) {
+                cells[i][j] = array[i - 1][j - 1]
+            }
+        }
+    }
 }
 
-/** ÅĞ¶Ï(fx,fy)(sx,sy)Á½µãÊÇ·ñÁ¬Í¨
-@return Á¬Í¨·µ»Øtrue
+/** åˆ¤æ–­(fx,fy)(sx,sy)ä¸¤ç‚¹æ˜¯å¦è¿é€š
+@return è¿é€šè¿”å›true
 */
 ConnectedResult LineUpArray::IsConectted(int col1, int row1, int col2, int row2)
 {
@@ -88,7 +94,7 @@ ConnectedResult LineUpArray::IsConectted(int col1, int row1, int col2, int row2)
         return ConnectedResult(false);
     }
 
-    if (fx == sx) // Í¬Ò»ÁĞ
+    if (fx == sx) // åŒä¸€åˆ—
     {
         if (isStraitYConnected(fx, fy, sy))
         {
@@ -100,7 +106,7 @@ ConnectedResult LineUpArray::IsConectted(int col1, int row1, int col2, int row2)
             return ToOutUsedResult(connected);
         }
     }
-    if (fy == sy) // Í¬Ò»ĞĞ
+    if (fy == sy) // åŒä¸€è¡Œ
     {
         if (isStraitXConnected(fy, fx, sx))
         {
@@ -196,9 +202,9 @@ ConnectedResult LineUpArray::ToOutUsedResult(ConnectedResult result)
     return r;
 }
 
-/** ÊÇ·ñÔÚx·½ÏòÖ±ÏßÁ¬Í¨
-@param Á½¸öµãµÄyÏàÍ¬£¬fÎªµÚÒ»¸öµãµÄx£¬sÎªµÚ¶ş¸öµãµÄx
-@return Á¬Í¨·µ»Øtrue
+/** æ˜¯å¦åœ¨xæ–¹å‘ç›´çº¿è¿é€š
+@param ä¸¤ä¸ªç‚¹çš„yç›¸åŒï¼Œfä¸ºç¬¬ä¸€ä¸ªç‚¹çš„xï¼Œsä¸ºç¬¬äºŒä¸ªç‚¹çš„x
+@return è¿é€šè¿”å›true
 */
 bool LineUpArray::isStraitXConnected(int y, int f, int s, bool checkValue)
 {
@@ -226,9 +232,9 @@ bool LineUpArray::isStraitXConnected(int y, int f, int s, bool checkValue)
     return startEqualsEnd;
 }
 
-/** ÊÇ·ñÔÚy·½ÏòÖ±ÏßÁ¬Í¨
-@param Á½¸öµãµÄxÏàÍ¬£¬fÎªµÚÒ»¸öµãµÄy£¬sÎªµÚ¶ş¸öµãµÄy
-@return Á¬Í¨·µ»Øtrue
+/** æ˜¯å¦åœ¨yæ–¹å‘ç›´çº¿è¿é€š
+@param ä¸¤ä¸ªç‚¹çš„xç›¸åŒï¼Œfä¸ºç¬¬ä¸€ä¸ªç‚¹çš„yï¼Œsä¸ºç¬¬äºŒä¸ªç‚¹çš„y
+@return è¿é€šè¿”å›true
 */
 bool LineUpArray::isStraitYConnected(int x, int f, int s, bool checkValue)
 {
