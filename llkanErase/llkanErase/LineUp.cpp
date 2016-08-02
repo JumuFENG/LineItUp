@@ -71,10 +71,13 @@ void LineUpArray::InitRadom()
 
 void LineUpArray::InitWithArray(vector<vector<int>> array)
 {
-    for (i = 1; i <= w - 2; ++i) {
-        for (j = 1; j <= h - 2; ++j) {
-            if (array.count > i - 1 && array.first?.count > j - 1) {
-                cells[i][j] = array[i - 1][j - 1]
+    for (int i = 1; i <= w - 2; ++i) 
+    {
+        for (int j = 1; j <= h - 2; ++j)
+        {
+            if (array.size() > i - 1 && array.front().size() > j - 1)
+            {
+                vecMap[i][j] = array[i - 1][j - 1];
             }
         }
     }
